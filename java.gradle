@@ -1,0 +1,69 @@
+buildscript {
+    repositories {
+        jcenter()
+        google()
+        maven {
+            url 'http://nexus.gluonhq.com/nexus/content/repositories/releases'
+        }
+    }
+    dependencies {
+        classpath 'org.javafxports:jfxmobile-plugin:2.0.28'
+    }
+}
+
+apply plugin: 'org.javafxports.jfxmobile'
+
+repositories {
+    jcenter()
+    maven {
+        url 'http://nexus.gluonhq.com/nexus/content/repositories/releases'
+    }
+}
+
+mainClassName = 'com.directions.Direction'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    println JavaVersion.current(); 
+    if (JavaVersion.current() == JavaVersion.VERSION_1_9) {
+        compile 'com.gluonhq:charm:5.0.0-jdk9'
+        androidRuntime 'com.gluonhq:charm:5.0.0'
+    } else {
+        compile 'com.gluonhq:charm:5.0.0'
+    }
+    compile 'com.fasterxml.jackson.core:jackson-core:2.7.3'
+    compile 'com.fasterxml.jackson.core:jackson-annotations:2.7.3'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
+    compile 'com.gluonhq:charm:5.0.0'
+    compile 'com.google.api-client:google-api-client:1.23.0'
+}
+
+jfxmobile {
+    downConfig {
+        version = '3.8.0'
+        // Do not edit the line below. Use Gluon Mobile Settings in your project context menu instead
+        plugins 'compass', 'display', 'lifecycle', 'magnetometer', 'position', 'settings', 'statusbar', 'storage'
+    }
+    android {
+        manifest = 'src/android/AndroidManifest.xml'
+        androidSdk = '/Users/hemma/Library/Android/sdk'
+        packagingOptions{
+                exclude 'META-INF/LICENSE'
+                exclude 'META-INF/LICENSE.txt'
+                exclude 'META-INF/NOTICE'
+            exclude 'META-INF/NOTICE.txt'
+        }
+    }
+    ios {
+        infoPList = file('src/ios/Default-Info.plist')
+        forceLinkClasses = [
+                'com.gluonhq.**.*',
+                'javax.annotations.**.*',
+                'javax.inject.**.*',
+                'javax.json.**.*',
+                'org.glassfish.json.**.*'
+        ]
+    }
+}
